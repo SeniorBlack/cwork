@@ -15,8 +15,7 @@ size_t mystrlen(const char *s) {
 char * mystrcpy(char *dest, const char *src) {
 	while(1) {
 		*dest = *src;
-		if() {
-			*src = '\0';
+		if(*src == '\0') {
 			break;
 		}
 		dest++;
