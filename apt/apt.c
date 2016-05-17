@@ -15,7 +15,7 @@ typedef struct node {
 //在末尾添加时间戳分割的节点
 void tail_add(data_node *head, char *p) {
 	data_node *tmp = (data_node *)malloc(sizeof(data_node));
-	while(*(tmp->stamp++) = *p++);
+	strcpy(tmp->stamp, p);
 	tmp->p_next = NULL;
 	data_node *p_node =  NULL;
 	for(p_node = head;p_node;p_node = p_node->p_next) {
@@ -38,7 +38,7 @@ void node_output(data_node *head) {
 	data_node *p_node =  NULL;
 	for (p_node = head;p_node;p_node = p_node->p_next) {
         if (p_node->p_next) {
-            fwrite(p_node->stamp, 1, 1, p_outfile);
+            fwrite(p_node->p_next->stamp, strlen(p_node->p_next->stamp), 1, p_outfile);
         }
     }
     fclose(p_outfile);
@@ -48,7 +48,7 @@ void node_output(data_node *head) {
 
 int main() {
 	char ch;
-	char str_buf[1024];
+	char str_buf[1024] = {'\0'};
 	data_node *head = NULL;
 	//打开文件
 	FILE *p_file = fopen("message.log", "r");
@@ -59,16 +59,17 @@ int main() {
 	//读取一个时间戳到str_buf
 	while((ch=fgetc(p_file)) != EOF) {
 		if(ch == "[") {
-			tail_add(head, str_buf);
-			memset(str_buf, 0, 1024)
+			if(str_buf[0] != '\0') {
+				tail_add(head, str_buf);
+			}
+			memset(str_buf, '\0', 1024)
 			continue;
 		}
 		int i = 0;
 		str_buf[i++] = ch;
-	} 
-           
-     
-
-	fclose();
+	}
+	//输出所有节点
+	node_outpt(head);       
+	fclose(p_file);
 	return 0;
 }
