@@ -32,8 +32,25 @@ void tail_add(char *p) {
 	tmp = NULL;
 }
 
-//根据被叫号码找Call-ID
-char *
+//根据被叫号码找Call_id
+char *find_call_id(char *to_number, char *call_id) {
+	data_node *p_node =  NULL;
+	char *num_match = NULL;
+	char *call_id_match = NULL;
+	for(p_node = head;p_node;p_node = p_node->p_next) {
+		num_match = strstr(p_node->stamp, to_number);
+		if(num_match) {
+			call_id_match = strstr(p_node->stamp, Call-ID);
+			for(call_id_match = call_id_match + 9;*call_id_match != '\n';call_id_match++) {
+				*call_id++ = call_id_match; 
+			}
+			return call_id;
+			break;
+		}
+
+	}
+	return NULL;
+}
 
 //输出所有有节点到文件
 void node_output() {
@@ -43,11 +60,9 @@ void node_output() {
 		exit(1);
 	}
 	data_node *p_node =  NULL;
-	fwrite(head->stamp, strlen(head->stamp), 1, p_outfile);
+	//fwrite(head->stamp, strlen(head->stamp), 1, p_outfile);
 	for (p_node = head;p_node;p_node = p_node->p_next) {
-        if (p_node->p_next) {
-            fwrite(p_node->p_next->stamp, strlen(p_node->p_next->stamp), 1, p_outfile);
-        }
+            fwrite(p_node->stamp, strlen(p_node->stamp), 1, p_outfile);
     }
     fclose(p_outfile);
 }
