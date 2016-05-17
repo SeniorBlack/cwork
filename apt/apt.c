@@ -33,7 +33,7 @@ void tail_add(char *p) {
 }
 
 //根据被叫号码找Call_id
-char *find_call_id(char *to_number, char *call_id) {
+void find_call_id(char *to_number, char *call_id) {
 	data_node *p_node =  NULL;
 	char *num_match = NULL;
 	char *call_id_match = NULL;
@@ -44,12 +44,10 @@ char *find_call_id(char *to_number, char *call_id) {
 			for(call_id_match = call_id_match + 9;*call_id_match != '\n';call_id_match++) {
 				*call_id++ = call_id_match; 
 			}
-			return call_id;
 			break;
 		}
 
 	}
-	return NULL;
 }
 
 //输出所有有节点到文件
@@ -89,6 +87,11 @@ int main() {
 		}
 		buffer[0] = '\0';
 	}
+	//查找call-id
+	char *to_number = "015861078585"
+	char call_id[30] = {'\0'};
+	find_call_id(to_number, call_id);
+	printf("call_id= %s\n", call_id);
 	//输出所有节点到文件
 	node_output(head);       
 	fclose(p_file);
