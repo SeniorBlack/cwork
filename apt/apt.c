@@ -1,5 +1,6 @@
 /*
-	app log 分析工具(APT)
+	name:	apt.c
+	function:	app log 分析工具(APT)
 	by 马爽
 	*/
 
@@ -32,7 +33,7 @@ void tail_add(char *p) {
 	tmp = NULL;
 }
 
-//根据被叫号码找Call_id
+//根据被叫号码找call_id
 void find_call_id(char *to_number, char *call_id) {
 	data_node *p_node =  NULL;
 	char *num_match = NULL;
@@ -50,8 +51,8 @@ void find_call_id(char *to_number, char *call_id) {
 	}
 }
 
-//输出所有有节点到文件
-void node_output() {
+//输出链表节点到文件,用call_id过滤
+void node_output(char *call_id) {
 	FILE *p_outfile = fopen("output.log", "w");
 	if(p_outfile == NULL) {
 		printf("failed to open outfile");
@@ -60,7 +61,9 @@ void node_output() {
 	data_node *p_node =  NULL;
 	//fwrite(head->stamp, strlen(head->stamp), 1, p_outfile);
 	for (p_node = head;p_node;p_node = p_node->p_next) {
+		if(strstr(p_node, call_id)) {
             fwrite(p_node->stamp, strlen(p_node->stamp), 1, p_outfile);
+        }
     }
     fclose(p_outfile);
 }
@@ -77,7 +80,7 @@ int main() {
 		printf("failed to open file");
 		exit(1);
 	}
-	//读取一个时间戳到str_buf
+	//读取一个时间戳到str_buf,插入单向链表尾部
 	while(fgets(buffer, 128, p_file) != NULL) {
 		strcat(str_buf, buffer);
 		printf("buffer = %s, str_buf = %s\n", buffer, str_buf);
@@ -93,7 +96,7 @@ int main() {
 	find_call_id(to_number, call_id);
 	printf("call_id= %s\n", call_id);
 	//输出所有节点到文件
-	node_output(head);       
+	node_output(call_id);       
 	fclose(p_file);
 	return 0;
 }
