@@ -41,9 +41,9 @@ void find_call_id(char *to_number, char *call_id) {
 	for(p_node = head;p_node;p_node = p_node->p_next) {
 		num_match = strstr(p_node->stamp, to_number);
 		if(num_match) {
-			call_id_match = strstr(p_node->stamp, Call-ID);
+			call_id_match = strstr(p_node->stamp, "Call-ID");
 			for(call_id_match = call_id_match + 9;*call_id_match != '\n';call_id_match++) {
-				*call_id++ = call_id_match; 
+				*call_id++ = *call_id_match; 
 			}
 			break;
 		}
@@ -61,7 +61,7 @@ void node_output(char *call_id) {
 	data_node *p_node =  NULL;
 	//fwrite(head->stamp, strlen(head->stamp), 1, p_outfile);
 	for (p_node = head;p_node;p_node = p_node->p_next) {
-		if(strstr(p_node, call_id)) {
+		if(strstr(p_node->stamp, call_id)) {
             fwrite(p_node->stamp, strlen(p_node->stamp), 1, p_outfile);
         }
     }
@@ -91,7 +91,7 @@ int main() {
 		buffer[0] = '\0';
 	}
 	//查找call-id
-	char *to_number = "015861078585"
+	char *to_number = "015861078585";
 	char call_id[30] = {'\0'};
 	find_call_id(to_number, call_id);
 	printf("call_id= %s\n", call_id);
