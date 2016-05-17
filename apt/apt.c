@@ -61,9 +61,10 @@ void node_output(char *call_id) {
 	data_node *p_node =  NULL;
 	//fwrite(head->stamp, strlen(head->stamp), 1, p_outfile);
 	for (p_node = head;p_node;p_node = p_node->p_next) {
+		//printf("%s\n", p_node->stamp);
 		if(strstr(p_node->stamp, call_id)) {
             fwrite(p_node->stamp, strlen(p_node->stamp), 1, p_outfile);
-        }
+		}
     }
     fclose(p_outfile);
 }
@@ -80,14 +81,20 @@ int main() {
 		printf("failed to open file");
 		exit(1);
 	}
+	int m = 0;
 	//读取一个时间戳到str_buf,插入单向链表尾部
 	while(fgets(buffer, 128, p_file) != NULL) {
-		strcat(str_buf, buffer);
-		printf("buffer = %s, str_buf = %s\n", buffer, str_buf);
-		if(strchr(str_buf, '[')) {
-			tail_add(str_buf);
-			memset(str_buf, '\0', 1024);
+		//strcat(str_buf2, buffer);
+		//printf("buffer = %s, str_buf = %s\n", buffer, str_buf);
+		if(strchr(buffer, '[')) {
+			m++;
+			if(m = 2) {
+				tail_add(str_buf);
+				memset(str_buf, '\0', 1024);
+				m = 0;
+			}
 		}
+		strcat(str_buf, buffer);
 		buffer[0] = '\0';
 	}
 	//查找call-id
