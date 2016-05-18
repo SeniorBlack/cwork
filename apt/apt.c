@@ -102,7 +102,7 @@ int main() {
 	char call_id[30] = {'\0'};
 	find_call_id(to_number, call_id);
 	printf("call_id= %s\n", call_id);
-	//输出所有节点到文件
+	//过滤后输出节点到output.log
 	node_output(call_id);       
 	fclose(p_file);
 	return 0;
